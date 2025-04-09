@@ -20,7 +20,7 @@
 
                         <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}"
                             id="first_name" autocomplete="off" type="text"
-                            name="first_name" value="{{$res.FirstName}" required >
+                            name="first_name" value="{{$res.FirstName}}" required >
                     </div>
 
                     <div class="form-group">
@@ -34,14 +34,14 @@
                         <label for="email">Email:</label>
                         <input class="form-control" id="email"
                                autocomplete="off" type='email'
-                               name='email' value="{{$res.Email}" required>
+                               name='email' value="{{$res.Email}}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Phone:</label>
                         <input class="form-control" id="phone"
                                autocomplete="off" type='email'
-                               name='phone' value="{{$res.Phone}" required>
+                               name='phone' value="{{$res.Phone}}" required>
                     </div>
 
                     <input type="submit" class="btn btn-primary" value="Make Reservation">
