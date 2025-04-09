@@ -9,7 +9,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 )
 
@@ -45,16 +44,13 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	}
 
 	buf := new(bytes.Buffer)
-
 	td = AddDefaultData(td, r)
-
 	_ = t.Execute(buf, td)
 
 	_, err := buf.WriteTo(w)
 	if err != nil {
 		fmt.Println("error writing template to browser", err)
 	}
-
 }
 
 // CreateTemplateCache creates a template cache as a map
@@ -87,47 +83,6 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 		}
 
 		myCache[name] = ts
-	}
-
-	return myCache, nil
-}
-func CheckTemplateCache() (map[string]*template.Template, error) {
-	myCache := map[string]*template.Template{}
-
-	cwd, _ := os.Getwd()
-	log.Println("Current working directory:", cwd)
-
-	templatesPath := filepath.Join(cwd, "templates")
-	pages, err := filepath.Glob(filepath.Join(templatesPath, "*.page.tmpl"))
-	if err != nil {
-		log.Println("Error finding page templates:", err)
-		return myCache, err
-	}
-
-	for _, page := range pages {
-		name := filepath.Base(page)
-		ts, err := template.New(name).ParseFiles(page)
-		if err != nil {
-			log.Printf("Error parsing page template %s: %v", name, err)
-			return myCache, err
-		}
-
-		matches, err := filepath.Glob(filepath.Join(templatesPath, "*.layout.tmpl"))
-		if err != nil {
-			log.Println("Error finding layout templates:", err)
-			return myCache, err
-		}
-
-		if len(matches) > 0 {
-			ts, err = ts.ParseGlob(filepath.Join(templatesPath, "*.layout.tmpl"))
-			if err != nil {
-				log.Printf("Error parsing layout templates for %s: %v", name, err)
-				return myCache, err
-			}
-		}
-
-		myCache[name] = ts
-		log.Printf("Template cached: %s", name)
 	}
 
 	return myCache, nil
