@@ -16,7 +16,7 @@
                             <label class="text-danger"> {{ . }} </label>
                         {{ end }}
 
-                        <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}"
+                        <input class="form-control {{with .Form.Errors.Get first_name}} is-invalid {{end}}"
                             id="first_name" autocomplete="off" type="text"
                             name="first_name" value="" required>
                     </div>
@@ -42,11 +42,8 @@
                                name='phone' value="" required>
                     </div>
 
-                    <hr>
                     <input type="submit" class="btn btn-primary" value="Make Reservation">
                 </form>
-
-
             </div>
         </div>
 
