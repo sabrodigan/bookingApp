@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/sabrodigan/bookings-app/internal/config"
 	"github.com/sabrodigan/bookings-app/internal/handlers"
@@ -35,7 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot create template cache: ", err)
 	}
-
+	done := make(chan bool)
 	app.TemplateCache = tc
 	app.UseCache = false
 
@@ -44,7 +43,13 @@ func main() {
 
 	render.NewTemplates(&app)
 
-	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
+	handlers.TypeWriter("Starting the application server on", 50)
+	handlers.TypeWriter(portNumber, 50)
+
+	if app.InProduction != true {
+		handlers.TypeWriter("\n\nStarting the development server...running\n", 75)
+		go handlers.Spinner(200, done)
+	}
 
 	srv := &http.Server{
 		Addr:    portNumber,

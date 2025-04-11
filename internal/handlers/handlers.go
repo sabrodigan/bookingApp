@@ -9,6 +9,7 @@ import (
 	"github.com/sabrodigan/bookings-app/internal/render"
 	"log"
 	"net/http"
+	"time"
 )
 
 // Repo the repository used by the handlers
@@ -33,6 +34,7 @@ func NewHandlers(r *Repository) {
 
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	log.Println("Home page hit\n")
 	remoteIP := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
@@ -42,6 +44,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 // About is the handler for the about page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// perform some logic
+	log.Println("About page hit\n")
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, again"
 
@@ -56,6 +59,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	log.Println("Reservation page hit\n")
 	var emptyReservation models.Reservation
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
@@ -67,6 +71,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 // PostReservation handles the posting of a reservation form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	log.Println("PostReservation page hit\n")
 	err := r.ParseForm()
 	if err != nil {
 		log.Println(err)
@@ -99,21 +104,26 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 // Generals renders the room page
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
+	log.Println("Generals page hit\n")
 	render.RenderTemplate(w, r, "generals.page.tmpl", &models.TemplateData{})
 }
 
 // Majors renders the room page
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
+	log.Println("Majors page hit\n")
 	render.RenderTemplate(w, r, "majors.page.tmpl", &models.TemplateData{})
 }
 
 // Availability renders the search availability page
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	log.Println("Availability page hit\n")
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
 
 // PostAvailability handles post
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
+	log.Println("PostAvailability page hit\n")
+	TypeWriter("PostAvailability page hit\n", 50)
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 
@@ -143,5 +153,29 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 // Contact renders the contact page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	log.Println("Contact page hit\n")
 	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
+}
+func TypeWriter(phrase string, delayMs int) {
+	// Simulate a typewriter effect with a custom delay in milliseconds
+	text := phrase
+	for _, char := range text {
+		fmt.Print(string(char))
+		time.Sleep(time.Duration(delayMs) * time.Millisecond)
+	}
+}
+func Spinner(delay time.Duration, done chan bool) {
+	// Spinner characters
+	for {
+		for _, r := range `|/-\` {
+			select {
+			case <-done:
+				fmt.Print("\r") // Clear the spinner
+				return
+			default:
+				fmt.Printf("\r%c", r) // Print spinner character
+				time.Sleep(delay)
+			}
+		}
+	}
 }
