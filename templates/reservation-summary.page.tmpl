@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{{ template "base" .}}
+
+
+{{ define "content" }}
+    {{ $res := index .Data "reservation" }}
+    <div class="container">
+        <div class="row">
+            <div class="coll">
+                <h1 class="display-1">Reservation details for confirm</h1>
+
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Please check your details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Firstname: {{ $res.FirstName }}</td>
+                        </tr>
+                        <tr>
+                            <td>Lastname: {{ $res.LastName }}</td>
+                        </tr>
+                        <tr>
+                            <td>email: {{ $res.Email }}</td>
+                        </tr>
+                        <tr>
+                            <td>phone: {{ $res.Phone }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{{ end }}
+
+{{ define "footer" }}
+    <p>&copy; 2025 Reservation System</p>
+{{ end }}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
