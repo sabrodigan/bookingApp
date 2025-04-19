@@ -186,6 +186,8 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		log.Println("cannot find session data for reservation")
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	data := make(map[string]interface{})
@@ -193,4 +195,9 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
 		Data: data,
 	})
+	m.App.Session.Remove(r.Context(), "reservation")
+}
+func (m *Repository) Error(w http.ResponseWriter, r *http.Request) {
+	log.Println("Error page has been called\n")
+	// render.RenderTemplate(w, r, "error.page.tmpl", &models.TemplateData{})
 }

@@ -53,6 +53,8 @@ func main() {
 	if app.InProduction != true {
 		handlers.TypeWriter("\n\nStarting the development server...running\n", 75)
 		go handlers.Spinner(200, done)
+	} else {
+		handlers.TypeWriter("\n\nStarting the production server...running\n", 75)
 	}
 
 	srv := &http.Server{

@@ -118,6 +118,21 @@
     <script>
         let attention = Prompt();
 
+
+        {{ with .Error }}
+            notify("{{.}}", "error")
+        {{end}}
+
+        {{ with .Flash }}
+            notify("{{.}}", "flash")
+        {{end}}
+
+        {{ with .Warning }}
+            notify("{{.}}", "warning")
+        {{end}}
+
+
+
         (function () {
             'use strict';
             window.addEventListener('load', function () {
@@ -152,6 +167,7 @@
                 confirmButtonText: confirmationButtonText
             })
         }
+
 
         function Prompt() {
             let toast = function (c) {
